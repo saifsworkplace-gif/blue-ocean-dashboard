@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blue Ocean Dashboard</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #0f0f0f, #1a1a1a);
+      color: #fff;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      background-color: #121212;
+      border-bottom: 1px solid #333;
+    }
+    h1 {
+      color: #00f2ff;
+      text-shadow: 0 0 10px #00f2ff;
+      font-size: 1.6rem;
+    }
+    nav a {
+      margin: 0 0.5rem;
+      color: #00ffe5;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    nav a.active {
+      font-weight: bold;
+      text-shadow: 0 0 5px #00ffe5;
+    }
+    .page-section {
+      display: none;
+      padding: 2rem;
+    }
+    .page-section.active {
+      display: block;
+    }
+    .auth-container, .chatbox-container {
+      max-width: 400px;
+      margin: auto;
+      background-color: #222;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,255,255,0.2);
+    }
+    input, button {
+      display: block;
+      width: 100%;
+      padding: 0.75rem;
+      margin-bottom: 1rem;
+      border: none;
+      border-radius: 5px;
+    }
+    input {
+      background: #111;
+      color: #0ff;
+    }
+    button {
+      background: #0ff;
+      color: #000;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .chatbox-input {
+      background: #111;
+      color: #0ff;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Blue Ocean</h1>
+    <nav>
+      <a onclick="switchPage('auth')">Login</a>
+      <a onclick="switchPage('portfolio')" class="active">Portfolio</a>
+      <a onclick="switchPage('market')">Market Overview</a>
+      <a onclick="switchPage('swap')">Swap</a>
+      <a onclick="switchPage('ai')">AI</a>
+    </nav>
+  </header>
+
+  <div id="auth" class="page-section">
+    <div class="auth-container">
+      <h2>Login / Signup</h2>
+      <form>
+        <input type="email" placeholder="Email" required />
+        <input type="password" placeholder="Password" required />
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+  </div>
+
+  <div id="portfolio" class="page-section active">
+    <h2>Portfolio</h2>
+    <div id="portfolio-data">Loading portfolio...</div>
+  </div>
+
+  <div id="market" class="page-section">
+    <h2>Market Overview</h2>
+    <div id="market-data">Loading market data...</div>
+  </div>
+
+  <div id="swap" class="page-section">
+    <h2>Swap</h2>
+    <p>Swap section coming soon...</p>
+  </div>
+
+  <div id="ai" class="page-section">
+    <h2>AI Chat</h2>
+    <div class="chatbox-container">
+      <input class="chatbox-input" placeholder="Ask your AI assistant anything..." />
+    </div>
+  </div>
+
+  <script>
+    const coins = [
+      { coin: "AVAX", qty: 115.51, entry: 25.96 },
+      { coin: "INJ", qty: 130.07, entry: 15.345 },
+      { coin: "RENDER", qty: 215.624, entry: 4.633 },
+      { coin: "ADX", qty: 9132, entry: 0.1095 },
+      { coin: "HBAR", qty: 3546.82, entry: 0.28164 }
+    ];
+
+    async function fetchBinancePrice(symbol) {
+      try {
+        const res = await fetch(`https://api.binance.com/api/v3/ticker/price?symbol=${symbol}USDT`);
+        const data = await res.json();
+        return parseFloat(data.price);
+      } catch (err) {
+        return null;
+      }
+    }
+
+    async function updatePortfolio() {
+      const container = document.getElementById("portfolio-data");
+      container.innerHTML = "<strong>Fetching data...</strong>";
+      let totalPnL = 0;
+      const results = await Promise.all(
+        coins.map(async ({ coin, qty, entry }) => {
+          const live = await fetchBinancePrice(coin);
+          const pnl = live ? ((live - entry) * qty).toFixed(2) : "N/A";
+          if (!isNaN(pnl)) totalPnL += parseFloat(pnl);
+          return `<p><strong>${coin}</strong> — Qty: ${qty}, Entry: $${entry}, Live: $${live || "N/A"}, P&L: ${pnl}</p>`;
+        })
+      );
+      container.innerHTML = results.join("") + `<p><strong>Total P&L: $${totalPnL.toFixed(2)}</strong></p>`;
+    }
+
+    async function updateMarket() {
+      const container = document.getElementById("market-data");
+      const marketCoins = ["BTC", "ETH", "SOL", "BNB"];
+      const results = await Promise.all(
+        marketCoins.map(async (coin) => {
+          const price = await fetchBinancePrice(coin);
+          return `<p><strong>${coin}</strong>: $${price || "N/A"}</p>`;
+        })
+      );
+      container.innerHTML = results.join("");
+    }
+
+    function switchPage(pageId) {
+      document.querySelectorAll('.page-section').forEach(section => {
+        section.classList.remove('active');
+      });
+      document.getElementById(pageId).classList.add('active');
+
+      document.querySelectorAll('nav a').forEach(link => {
+        link.classList.remove('active');
+      });
+      event.target.classList.add('active');
+
+      if (pageId === "portfolio") updatePortfolio();
+      if (pageId === "market") updateMarket();
+    }
+
+    updatePortfolio();
+  </script>
+</body>
+</html>
