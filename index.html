@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Blue Ocean Dashboard</title>
+  <script src="https://widget.uniswap.org/v3.js"></script>
   <style>
     :root {
       --bg-dark: #1f1f1f;
@@ -77,7 +78,6 @@
       gap: 10px;
       align-items: center;
       justify-content: center;
-      margin-top: 1rem;
     }
     .chatbox-controls button {
       width: 40px;
@@ -92,8 +92,7 @@
     .chatbox-header {
       text-align: center;
       font-size: 1.2rem;
-      margin: 1rem auto 2rem auto;
-      max-width: 700px;
+      margin-bottom: 1rem;
       background: linear-gradient(90deg, #00ffff, #9b59b6, #8e44ad);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -134,12 +133,20 @@
     }
     .positive { color: #0f0; }
     .negative { color: #f55; }
+    .swap-container {
+      max-width: 700px;
+      margin: 2rem auto;
+      padding: 2rem;
+      background-color: #222;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0,255,255,0.2);
+    }
   </style>
 </head>
-<body>
+<body onload="switchPage('ai')">
   <header>
     <nav>
-      <a onclick="switchPage('ai')">AI</a>
+      <a onclick="switchPage('ai')" class="active">AI</a>
       <a onclick="switchPage('portfolio')">Portfolio</a>
       <a onclick="switchPage('market')">Market Overview</a>
       <a onclick="switchPage('swap')">Swap</a>
@@ -170,10 +177,19 @@
 
   <div id="swap" class="page-section">
     <h2>Swap</h2>
-    <p>Swap section coming soon...</p>
+    <div class="swap-container">
+      <iframe
+        src="https://app.uniswap.org/#/swap?chain=mainnet"
+        height="660px"
+        width="100%"
+        style="border: none; border-radius: 10px; box-shadow: 0 0 10px #00f2ff; background-color: #1f1f1f"
+        title="Uniswap Widget"
+        allow="clipboard-write;"
+      ></iframe>
+    </div>
   </div>
 
-  <div id="ai" class="page-section">
+  <div id="ai" class="page-section active">
     <div class="chatbox-header">Unlock Market Insights, Chart Analytics, and More with Your AI Chat Assistant!</div>
     <div class="chatbox-container">
       <div class="chatbox-controls">
@@ -245,8 +261,6 @@
       if (pageId === "portfolio") updatePortfolio();
       if (pageId === "market") updateMarket();
     }
-
-    updatePortfolio();
   </script>
 </body>
 </html>
