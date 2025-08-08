@@ -29,6 +29,11 @@
       color: #00ffe5;
       cursor: pointer;
       text-decoration: none;
+      transition: all 0.3s ease;
+    }
+    nav a:hover {
+      color: #fff;
+      text-shadow: 0 0 5px #00ffe5;
     }
     nav a.active {
       font-weight: bold;
@@ -49,6 +54,27 @@
       border-radius: 10px;
       box-shadow: 0 0 10px rgba(0,255,255,0.2);
     }
+    .auth-container input {
+      background: #111;
+      color: #0ff;
+      border: 1px solid #0ff;
+      transition: 0.3s;
+    }
+    .auth-container input:focus {
+      box-shadow: 0 0 10px #00ffe5;
+      outline: none;
+    }
+    .chatbox-input {
+      background: #111;
+      color: #0ff;
+      border: 1px solid #00ffe5;
+      box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+      animation: pulseGlow 2s infinite alternate;
+    }
+    @keyframes pulseGlow {
+      from { box-shadow: 0 0 10px rgba(0, 255, 255, 0.5); }
+      to { box-shadow: 0 0 20px rgba(0, 255, 255, 1); }
+    }
     input, button {
       display: block;
       width: 100%;
@@ -57,20 +83,33 @@
       border: none;
       border-radius: 5px;
     }
-    input {
-      background: #111;
-      color: #0ff;
-    }
     button {
       background: #0ff;
       color: #000;
       font-weight: bold;
       cursor: pointer;
     }
-    .chatbox-input {
-      background: #111;
-      color: #0ff;
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background-color: #1a1a1a;
+      box-shadow: 0 0 10px rgba(0, 255, 255, 0.1);
     }
+    th, td {
+      padding: 1rem;
+      text-align: left;
+      border-bottom: 1px solid #333;
+    }
+    th {
+      background-color: #121212;
+      color: #00ffe5;
+      text-shadow: 0 0 3px #00ffe5;
+    }
+    td {
+      font-size: 0.95rem;
+    }
+    .positive { color: #0f0; }
+    .negative { color: #f55; }
   </style>
 </head>
 <body>
@@ -141,15 +180,16 @@
       const container = document.getElementById("portfolio-data");
       container.innerHTML = "<strong>Fetching data...</strong>";
       let totalPnL = 0;
-      const results = await Promise.all(
-        coins.map(async ({ coin, qty, entry }) => {
-          const live = await fetchBinancePrice(coin);
-          const pnl = live ? ((live - entry) * qty).toFixed(2) : "N/A";
-          if (!isNaN(pnl)) totalPnL += parseFloat(pnl);
-          return `<p><strong>${coin}</strong> — Qty: ${qty}, Entry: $${entry}, Live: $${live || "N/A"}, P&L: ${pnl}</p>`;
-        })
-      );
-      container.innerHTML = results.join("") + `<p><strong>Total P&L: $${totalPnL.toFixed(2)}</strong></p>`;
+      let table = `<table><thead><tr><th>Coin</th><th>Qty</th><th>Entry</th><th>Live</th><th>P&amp;L</th></tr></thead><tbody>`;
+      for (const { coin, qty, entry } of coins) {
+        const live = await fetchBinancePrice(coin);
+        const pnl = live ? ((live - entry) * qty).toFixed(2) : "N/A";
+        if (!isNaN(pnl)) totalPnL += parseFloat(pnl);
+        const className = pnl >= 0 ? "positive" : "negative";
+        table += `<tr><td><strong>${coin}</strong></td><td>${qty}</td><td>$${entry}</td><td>$${live || "N/A"}</td><td class="${className}">$${pnl}</td></tr>`;
+      }
+      table += `</tbody><tfoot><tr><td colspan="4"><strong>Total P&amp;L</strong></td><td class="${totalPnL >= 0 ? "positive" : "negative"}"><strong>$${totalPnL.toFixed(2)}</strong></td></tr></tfoot></table>`;
+      container.innerHTML = table;
     }
 
     async function updateMarket() {
