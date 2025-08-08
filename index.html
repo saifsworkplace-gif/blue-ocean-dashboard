@@ -6,7 +6,7 @@
   <title>Blue Ocean Dashboard</title>
   <style>
     :root {
-      --bg-dark: linear-gradient(135deg, #1f1f1f, #1a1a1a);
+      --bg-dark: linear-gradient(to bottom, #1f1f1f, #2a2a2a);
       --text-color-dark: #fff;
       --highlight: #00f2ff;
     }
@@ -54,7 +54,7 @@
       display: block;
     }
     .auth-container, .chatbox-container {
-      max-width: 400px;
+      max-width: 600px;
       margin: auto;
       background-color: #222;
       padding: 2rem;
@@ -74,6 +74,8 @@
     .chatbox-input {
       box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
       animation: pulseGlow 2s infinite alternate;
+      font-size: 1.1rem;
+      height: 3rem;
     }
     @keyframes pulseGlow {
       from { box-shadow: 0 0 10px rgba(0, 255, 255, 0.5); }
