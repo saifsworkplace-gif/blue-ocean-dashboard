@@ -5,11 +5,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Blue Ocean Dashboard</title>
   <style>
+    :root {
+      --bg-dark: linear-gradient(135deg, #0f0f0f, #1a1a1a);
+      --bg-light: linear-gradient(135deg, #f0f0f0, #dcdcdc);
+      --text-color-dark: #fff;
+      --text-color-light: #000;
+      --highlight: #00f2ff;
+    }
     body {
       margin: 0;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #0f0f0f, #1a1a1a);
-      color: #fff;
+      background: var(--bg-dark);
+      color: var(--text-color-dark);
+      transition: all 0.5s ease;
+    }
+    body.light {
+      background: var(--bg-light);
+      color: var(--text-color-light);
     }
     header {
       display: flex;
@@ -20,24 +32,32 @@
       border-bottom: 1px solid #333;
     }
     h1 {
-      color: #00f2ff;
-      text-shadow: 0 0 10px #00f2ff;
+      color: var(--highlight);
+      text-shadow: 0 0 10px var(--highlight);
       font-size: 1.6rem;
     }
     nav a {
       margin: 0 0.5rem;
-      color: #00ffe5;
+      color: var(--highlight);
       cursor: pointer;
       text-decoration: none;
       transition: all 0.3s ease;
     }
     nav a:hover {
       color: #fff;
-      text-shadow: 0 0 5px #00ffe5;
+      text-shadow: 0 0 5px var(--highlight);
     }
     nav a.active {
       font-weight: bold;
-      text-shadow: 0 0 5px #00ffe5;
+      text-shadow: 0 0 5px var(--highlight);
+    }
+    .theme-toggle {
+      background: none;
+      border: 1px solid var(--highlight);
+      color: var(--highlight);
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      border-radius: 5px;
     }
     .page-section {
       display: none;
@@ -54,20 +74,17 @@
       border-radius: 10px;
       box-shadow: 0 0 10px rgba(0,255,255,0.2);
     }
-    .auth-container input {
+    .auth-container input, .chatbox-input {
       background: #111;
       color: #0ff;
       border: 1px solid #0ff;
       transition: 0.3s;
     }
-    .auth-container input:focus {
+    .auth-container input:focus, .chatbox-input:focus {
       box-shadow: 0 0 10px #00ffe5;
       outline: none;
     }
     .chatbox-input {
-      background: #111;
-      color: #0ff;
-      border: 1px solid #00ffe5;
       box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
       animation: pulseGlow 2s infinite alternate;
     }
@@ -102,8 +119,8 @@
     }
     th {
       background-color: #121212;
-      color: #00ffe5;
-      text-shadow: 0 0 3px #00ffe5;
+      color: var(--highlight);
+      text-shadow: 0 0 3px var(--highlight);
     }
     td {
       font-size: 0.95rem;
@@ -122,6 +139,7 @@
       <a onclick="switchPage('swap')">Swap</a>
       <a onclick="switchPage('ai')">AI</a>
     </nav>
+    <button class="theme-toggle" onclick="toggleTheme()">🌓</button>
   </header>
 
   <div id="auth" class="page-section">
@@ -217,6 +235,10 @@
 
       if (pageId === "portfolio") updatePortfolio();
       if (pageId === "market") updateMarket();
+    }
+
+    function toggleTheme() {
+      document.body.classList.toggle("light");
     }
 
     updatePortfolio();
