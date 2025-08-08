@@ -6,7 +6,7 @@
   <title>Blue Ocean Dashboard</title>
   <style>
     :root {
-      --bg-dark: linear-gradient(135deg, #1a1a1a, #121212);
+      --bg-dark: linear-gradient(135deg, #1f1f1f, #1a1a1a);
       --text-color-dark: #fff;
       --highlight: #00f2ff;
     }
@@ -48,6 +48,7 @@
     .page-section {
       display: none;
       padding: 2rem;
+      background: var(--bg-dark);
     }
     .page-section.active {
       display: block;
@@ -120,7 +121,7 @@
     <h1>Blue Ocean</h1>
     <nav>
       <a onclick="switchPage('ai')">AI</a>
-      <a onclick="switchPage('portfolio')" class="active">Portfolio</a>
+      <a onclick="switchPage('portfolio')">Portfolio</a>
       <a onclick="switchPage('market')">Market Overview</a>
       <a onclick="switchPage('swap')">Swap</a>
       <a onclick="switchPage('auth')">Login/Signup</a>
@@ -138,7 +139,7 @@
     </div>
   </div>
 
-  <div id="portfolio" class="page-section active">
+  <div id="portfolio" class="page-section">
     <h2>Portfolio</h2>
     <div id="portfolio-data">Loading portfolio...</div>
   </div>
