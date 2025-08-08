@@ -19,10 +19,6 @@
       color: var(--text-color-dark);
       transition: all 0.5s ease;
     }
-    body.light {
-      background: var(--bg-light);
-      color: var(--text-color-light);
-    }
     header {
       display: flex;
       justify-content: space-between;
@@ -50,14 +46,6 @@
     nav a.active {
       font-weight: bold;
       text-shadow: 0 0 5px var(--highlight);
-    }
-    .theme-toggle {
-      background: none;
-      border: 1px solid var(--highlight);
-      color: var(--highlight);
-      padding: 0.5rem 1rem;
-      cursor: pointer;
-      border-radius: 5px;
     }
     .page-section {
       display: none;
@@ -139,7 +127,6 @@
       <a onclick="switchPage('swap')">Swap</a>
       <a onclick="switchPage('ai')">AI</a>
     </nav>
-    <button class="theme-toggle" onclick="toggleTheme()">🌓</button>
   </header>
 
   <div id="auth" class="page-section">
@@ -235,10 +222,6 @@
 
       if (pageId === "portfolio") updatePortfolio();
       if (pageId === "market") updateMarket();
-    }
-
-    function toggleTheme() {
-      document.body.classList.toggle("light");
     }
 
     updatePortfolio();
