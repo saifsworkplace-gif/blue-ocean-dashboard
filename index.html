@@ -19,16 +19,11 @@
     }
     header {
       display: flex;
-      justify-content: space-between;
+      justify-content: flex-end;
       align-items: center;
       padding: 1rem 2rem;
       background-color: #1a1a1a;
       border-bottom: 1px solid #333;
-    }
-    h1 {
-      color: var(--highlight);
-      text-shadow: 0 0 10px var(--highlight);
-      font-size: 1.6rem;
     }
     nav a {
       margin: 0 0.5rem;
@@ -97,7 +92,8 @@
     .chatbox-header {
       text-align: center;
       font-size: 1.2rem;
-      margin-bottom: 1rem;
+      margin: 1rem auto 2rem auto;
+      max-width: 700px;
       background: linear-gradient(90deg, #00ffff, #9b59b6, #8e44ad);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -142,7 +138,6 @@
 </head>
 <body>
   <header>
-    <h1>Blue Ocean</h1>
     <nav>
       <a onclick="switchPage('ai')">AI</a>
       <a onclick="switchPage('portfolio')">Portfolio</a>
@@ -151,6 +146,8 @@
       <a onclick="switchPage('auth')">Login/Signup</a>
     </nav>
   </header>
+
+  <div class="chatbox-header">Unlock Market Insights, Chart Analytics, and More with Your AI Chat Assistant!</div>
 
   <div id="auth" class="page-section">
     <div class="auth-container">
@@ -179,9 +176,7 @@
   </div>
 
   <div id="ai" class="page-section">
-    <h2>AI Chat</h2>
     <div class="chatbox-container">
-      <div class="chatbox-header">Unlock Market Insights, Chart Analytics, and More with Your AI Chat Assistant!</div>
       <div class="chatbox-controls">
         <input class="chatbox-input" placeholder="Lets Make Some Dollars...$$$" />
         <button title="Send">▶</button>
